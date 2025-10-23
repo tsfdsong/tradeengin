@@ -1,0 +1,5 @@
+FROM busybox:latest
+WORKDIR /app
+COPY ../../bin/matching /app/matching
+COPY ../../app/matching/etc/matching.yaml /app/matching.yaml
+

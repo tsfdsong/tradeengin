@@ -1,0 +1,33 @@
+Name: gateway
+Host: 0.0.0.0
+Port: 8888
+
+# RPC 服务器配置优化
+Timeout: 30000  # RPC 调用超时 30 秒
+KeepAlive:
+  Time: 60  # 保持连接时间
+  Timeout: 10  # 保持连接超时
+
+# 日志配置（用于调试）
+Log:
+  Level: info
+  Mode: console
+
+OrderRpc:
+  Endpoints:
+    - "order:20016"  # 使用容器名和端口
+  NonBlock: true
+MatchRpc:
+  Endpoints:
+    - "matching:20015"  # 使用容器名和端口
+  NonBlock: true
+
+Gateway:
+  WorkerCount: 16
+  QueueSize: 65536
+  BatchSize: 256
+  FlushInterval: 100ms
+
+RedisConf:
+  Host: redis:6379
+  DB: 0

@@ -1,0 +1,10 @@
+Name: order.rpc
+ListenOn: 0.0.0.0:20016
+
+Matching:
+  Endpoints:
+    - "matching:20015"  # 使用容器名和端口
+
+RedisConf:
+  Host: redis:6379
+  DB: 0

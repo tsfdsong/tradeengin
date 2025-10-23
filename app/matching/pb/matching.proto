@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package match;
+
+option go_package = "./match";
+
+message Order {
+    uint64 id = 1;
+    string symbol = 2;
+    double price = 3;
+    int64 quantity = 4;
+    int32 side = 5;
+    int32 type = 6;
+    int64 timestamp = 7;
+    string client_id = 8;
+}
+
+message Trade {
+    uint64 trade_id = 1;
+    uint64 taker_order_id = 2;
+    uint64 maker_order_id = 3;
+    string symbol = 4;
+    double price = 5;
+    int64 quantity = 6;
+    int64 timestamp = 7;
+}
+
+message MatchResult {
+    repeated Trade trades = 1;
+    Order order = 2;
+    int64 timestamp = 3;
+}
+
+message OrderBookRequest {
+    string symbol = 1;
+    int32 depth = 2;
+}
+
+message OrderBookSnapshot {
+    string symbol = 1;
+    repeated PriceLevel bids = 2;
+    repeated PriceLevel asks = 3;
+    int64 timestamp = 4;
+}
+
+message PriceLevel {
+    double price = 1;
+    int64 quantity = 2;
+    int32 order_count = 3;
+}
+
+service MatchService {
+    rpc ProcessOrder(Order) returns (MatchResult);
+    rpc GetOrderBook(OrderBookRequest) returns (OrderBookSnapshot);
+}

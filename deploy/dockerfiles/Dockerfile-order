@@ -1,0 +1,5 @@
+FROM busybox:latest
+WORKDIR /app
+COPY ../../bin/order /app/order
+COPY ../../app/order/etc/order.yaml /app/order.yaml
+

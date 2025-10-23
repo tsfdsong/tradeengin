@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package order;
+
+option go_package = "./order";
+
+message Order {
+    uint64 id = 1;
+    string symbol = 2;
+    double price = 3;
+    int64 quantity = 4;
+    int32 side = 5;
+    int32 type = 6;
+    int64 timestamp = 7;
+    string client_id = 8;
+}
+
+message OrderRequest {
+    Order order = 1;
+}
+
+message OrderResponse {
+    uint64 order_id = 1;
+    int32 status = 2;
+    int64 timestamp = 3;
+}
+
+message BatchOrderRequest {
+    repeated Order orders = 1;
+}
+
+message BatchOrderResponse {
+    repeated OrderResponse results = 1;
+}
+
+service OrderService {
+    rpc CreateOrder(OrderRequest) returns (OrderResponse);
+    rpc CreateBatchOrder(BatchOrderRequest) returns (BatchOrderResponse);
+}

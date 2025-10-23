@@ -1,0 +1,41 @@
+version: "3.7"
+services:
+
+  gateway:
+    build:
+      context: ../../
+      dockerfile: ./deploy/dockerfiles/Dockerfile-gateway
+    container_name: gateway
+    restart: unless-stopped
+    entrypoint: ["/app/gateway","-f","/app/gateway.yaml"]
+    ports: # 映射端口
+      - "8888:8888"
+    networks:
+      - engin
+  matching:
+    build:
+      context: ../../
+      dockerfile: ./deploy/dockerfiles/Dockerfile-matching
+    container_name: matching
+    restart: unless-stopped
+    entrypoint: ["/app/matching","-f","/app/matching.yaml"]
+    ports: # 映射端口
+      - "20015:20015"
+    networks:
+      - engin
+  order:
+    build:
+      context: ../../
+      dockerfile: ./deploy/dockerfiles/Dockerfile-order
+    container_name: order
+    restart: unless-stopped
+    entrypoint: ["/app/order","-f","/app/order.yaml"]
+    ports: # 映射端口
+      - "20016:20016"
+    depends_on:
+      - matching
+    networks:
+      - engin
+networks:
+  engin:
+    external: true

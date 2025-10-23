@@ -1,0 +1,17 @@
+Name: matching.rpc
+ListenOn: 0.0.0.0:20015
+
+Matching:
+  Symbols:
+    - "BTCUSDT"
+    - "ETHUSDT"
+    - "BNBUSDT"
+  OrderBookShards: 8
+  BatchSize: 128
+  WorkerCount: 32
+  SnapshotInterval: 30s
+
+Redis:
+  Host: redis:6379
+  DB: 0
+  Key: matching-redis  # 添加这个字段

@@ -1,0 +1,54 @@
+type (
+	OrderReq {
+		Symbol   string  `json:"symbol"`
+		Price    float64 `json:"price"`
+		Quantity int64   `json:"quantity"`
+		Side     int8    `json:"side"`
+		Type     int8    `json:"type"`
+		ClientID string  `json:"clientId"`
+	}
+	OrderResp {
+		OrderID   uint64 `json:"orderId"`
+		Status    int8   `json:"status"`
+		Timestamp int64  `json:"timestamp"`
+	}
+	BatchOrderReq {
+		Orders []OrderReq `json:"orders"`
+	}
+	BatchOrderResp {
+		Results []OrderResp `json:"results"`
+	}
+	OrderBookReq {
+		Symbol string `path:"symbol"`
+		Depth  int    `form:"depth,optional,default=20"`
+	}
+	OrderBookResp {
+		Symbol string       `json:"symbol"`
+		Bids   []PriceLevel `json:"bids"`
+		Asks   []PriceLevel `json:"asks"`
+		Time   int64        `json:"time"`
+	}
+	PriceLevel {
+		Price    float64 `json:"price"`
+		Quantity int64   `json:"quantity"`
+		Count    int     `json:"count"`
+	}
+)
+
+@server (
+	middleware: Metrics
+)
+service gateway {
+	@handler createOrder
+	post /api/v1/order (OrderReq) returns (OrderResp)
+
+	@handler createBatchOrder
+	post /api/v1/order/batch (BatchOrderReq) returns (BatchOrderResp)
+
+	@handler getOrderBook
+	get /api/v1/orderbook/:symbol (OrderBookReq) returns (OrderBookResp)
+
+	@handler metrics
+	get /metrics returns (string)
+}
+
