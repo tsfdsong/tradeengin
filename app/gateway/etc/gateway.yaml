@@ -28,6 +28,27 @@ Gateway:
   BatchSize: 256
   FlushInterval: 100ms
 
+# Redis配置 - 使用go-zero标准格式
 RedisConf:
   Host: redis:6379
-  DB: 0
+  Type: node
+  Pass: ""
+
+# 限流配置 - 使用go-zero TokenLimiter
+RateLimit:
+  Enabled: true
+  Rate: 10000       # 每秒请求数
+  Burst: 20000      # 突发容量
+  OrderRate: 5000   # 订单接口限流
+  OrderBurst: 10000 # 订单接口突发
+
+# 熔断配置 - 使用go-zero Google SRE熔断器
+Breaker:
+  Enabled: true
+  K: 1.5            # 当成功率低于66.7%时熔断
+
+# 健康检查配置
+HealthCheck:
+  Enabled: true
+  Path: /health
+  LivePath: /health/live

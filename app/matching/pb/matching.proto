@@ -23,6 +23,7 @@ message Trade {
     double price = 5;
     int64 quantity = 6;
     int64 timestamp = 7;
+    int32 taker_side = 8;  // 新增: Taker方向
 }
 
 message MatchResult {
@@ -49,7 +50,35 @@ message PriceLevel {
     int32 order_count = 3;
 }
 
+// 新增: 取消订单请求
+message CancelOrderRequest {
+    uint64 order_id = 1;
+    string symbol = 2;
+}
+
+// 新增: 取消订单响应
+message CancelOrderResponse {
+    bool success = 1;
+    string message = 2;
+    uint64 order_id = 3;
+}
+
+// 新增: 查询订单请求
+message QueryOrderRequest {
+    uint64 order_id = 1;
+    string symbol = 2;
+}
+
+// 新增: 查询订单响应
+message QueryOrderResponse {
+    Order order = 1;
+    int32 status = 2;  // 0:挂单中, 1:部分成交, 2:完全成交, 3:已取消
+    int64 filled_quantity = 3;
+}
+
 service MatchService {
     rpc ProcessOrder(Order) returns (MatchResult);
     rpc GetOrderBook(OrderBookRequest) returns (OrderBookSnapshot);
+    rpc CancelOrder(CancelOrderRequest) returns (CancelOrderResponse);  // 新增
+    rpc QueryOrder(QueryOrderRequest) returns (QueryOrderResponse);     // 新增
 }

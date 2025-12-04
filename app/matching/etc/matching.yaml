@@ -1,6 +1,7 @@
 Name: matching.rpc
 ListenOn: 0.0.0.0:20015
 
+# 撮合引擎配置
 Matching:
   Symbols:
     - "BTCUSDT"
@@ -10,8 +11,11 @@ Matching:
   BatchSize: 128
   WorkerCount: 32
   SnapshotInterval: 30s
+  PersistEnabled: true   # 启用Redis持久化
+  PersistInterval: 5s    # 每5秒持久化一次
 
-Redis:
+# Redis配置 - 使用go-zero标准格式
+RedisConf:
   Host: redis:6379
-  DB: 0
-  Key: matching-redis  # 添加这个字段
+  Type: node
+  Pass: ""

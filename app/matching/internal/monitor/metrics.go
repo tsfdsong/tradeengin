@@ -1,6 +1,7 @@
 package monitor
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -150,14 +151,14 @@ func (m *MetricsCollector) RecordBatchProcessed(batchSize int, latency time.Dura
 	batchProcessingCount.Inc()
 }
 
-// RecordWorkerLoad 记录工作协程负载
+// RecordWorkerLoad 记录工作协程负载 - 修复 workerID 转换问题
 func (m *MetricsCollector) RecordWorkerLoad(workerID int, load int) {
-	workerLoad.WithLabelValues(string(rune(workerID))).Set(float64(load))
+	workerLoad.WithLabelValues(fmt.Sprintf("%d", workerID)).Set(float64(load))
 }
 
-// RecordWorkerProcessed 记录工作协程处理数量
+// RecordWorkerProcessed 记录工作协程处理数量 - 修复 workerID 转换问题
 func (m *MetricsCollector) RecordWorkerProcessed(workerID int, count int) {
-	workerProcessed.WithLabelValues(string(rune(workerID))).Add(float64(count))
+	workerProcessed.WithLabelValues(fmt.Sprintf("%d", workerID)).Add(float64(count))
 }
 
 // SetQueueDepth 设置队列深度

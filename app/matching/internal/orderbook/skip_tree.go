@@ -24,6 +24,7 @@ type SkipTree struct {
 	reverse  bool // true: 降序, false: 升序
 	size     int
 	mu       sync.RWMutex
+	rngMu    sync.Mutex // 新增: 随机数生成器锁
 	rng      *rand.Rand
 }
 
@@ -60,8 +61,11 @@ func NewSkipTree(maxLevel int, reverse bool) *SkipTree {
 	return st
 }
 
-// randomLevel 随机生成层级
+// randomLevel 随机生成层级 - 修复并发安全问题
 func (st *SkipTree) randomLevel() int {
+	st.rngMu.Lock()
+	defer st.rngMu.Unlock()
+
 	level := 0
 	for st.rng.Float32() < 0.5 && level < st.maxLevel {
 		level++
